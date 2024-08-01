@@ -18,8 +18,8 @@ const Form: React.FC = () => {
   };
 
   return (
-    <div className="py-5 bg-black">
-      <div className="container flex flex-col items-center justify-center">
+    <div className="flex items-center justify-center ">
+      <div className="flex flex-col p-10 bg-black rounded-2xl ">
         <label htmlFor="player1" className="text-white">
           Player 1
         </label>
@@ -29,9 +29,14 @@ const Form: React.FC = () => {
         </label>
         <input type="text" name="player2" id="player2" ref={player2Ref} />
         <label htmlFor="player2" className="text-white">
-          امتیاز برنده{" "}
+          winner score{" "}
         </label>
-        <input type="number" id="winnerScore" ref={winnerScoreRef} />
+        <input
+          type="number"
+          id="winnerScore"
+          ref={winnerScoreRef}
+          placeholder="100"
+        />
         <button
           className="p-2 mt-4 text-white bg-red-700 rounded-lg"
           onClick={Nextpage}

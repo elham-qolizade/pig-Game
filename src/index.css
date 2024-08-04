@@ -7,12 +7,22 @@ button ,.pig-game{
     
 }
 
+input{
+    border-radius: 10px;
+}
+
 .current-box{
     background-color: rgb(80, 80, 80);
 }
 :root{
     background: linear-gradient(to top, #c94b4b, #4b134f) no-repeat center center fixed;
 }
-.new-game-btn{
+.new-game-btn,.start-btn,.close-btn {
     background:linear-gradient(to right, #e94057, #f27121) ;
+}
+.custom-background{
+background-size: cover;
+}
+.winner-background {
+    background-image: url(${wincolor});
 }

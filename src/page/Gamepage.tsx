@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAppContext } from "../context/appcontext";
 import Roles from "./Roles";
 import dice1 from "../assets/dice1.png";
 import dice2 from "../assets/dice2.png";
@@ -7,12 +8,10 @@ import dice4 from "../assets/dice4.png";
 import dice5 from "../assets/dice5.png";
 import dice6 from "../assets/dice6.png";
 import winimage from "../assets/winner.png";
+
 const diceImages = [dice1, dice2, dice3, dice4, dice5, dice6];
 
 const GamePage: React.FC = () => {
-  const player1 = "player1";
-  const player2 = "player2";
-  const winScore = 20;
   const [showRules, setShowRules] = useState(false);
   const [diceImage, setDiceImage] = useState<string>(diceImages[0]);
   const [player1Score, setPlayer1Score] = useState(0);
@@ -25,6 +24,7 @@ const GamePage: React.FC = () => {
   const [player1Color, setPlayer1Color] = useState("white");
   const [player2Color, setPlayer2Color] = useState("white");
   const [wincolor, setWincolor] = useState(winimage);
+  const { player1, player2, winScore } = useAppContext();
 
   useEffect(() => {
     setPlayer1Color(CurrentPlayer === 1 ? "#CCCCCC" : "white");
@@ -37,7 +37,6 @@ const GamePage: React.FC = () => {
 
   const rollDice = () => {
     const diceRoll = Math.floor(Math.random() * 6) + 1;
-
     setDiceImage(diceImages[diceRoll - 1]);
 
     if (diceRoll === 1) {
@@ -83,6 +82,7 @@ const GamePage: React.FC = () => {
     setPlayer1Color(CurrentPlayer === 1 ? "#CCCCCC" : "white");
     setPlayer2Color(CurrentPlayer === 2 ? "#CCCCCC" : "white");
   };
+
   const checkGameOver = () => {
     if (player1Score >= winScore || player2Score >= winScore) {
       setWinner(player1Score >= winScore ? 1 : 2);
@@ -92,92 +92,94 @@ const GamePage: React.FC = () => {
     return false;
   };
 
-  return (
-    <div>
-      <div className="container flex flex-col items-center justify-center ">
-        <div className="">
-          <div className="text-center bg-white rounded-md pig-game">
-            <h1 className="text-2xl font-medium text-center text-orange">
-              PIG GAME
-            </h1>
-          </div>
+  const play1background = {
+    backgroundColor: player1Color,
+    backgroundImage: winner === 1 ? `url(${wincolor})` : player1Color,
+    backgroundSize: "cover",
+  };
+  const play2background = {
+    backgroundColor: player2Color,
+    backgroundImage: winner === 2 ? `url(${wincolor})` : player1Color,
+    backgroundSize: "cover",
+  };
 
-          <button
-            onClick={toggleRulesModal}
-            className="px-6 py-4 mb-3 font-medium text-black bg-white rounded-lg"
-          >
-            Rules
-          </button>
+  return (
+    <div className="container flex flex-col  ">
+      <div className=" py-2 flex items-center gap-80 justify-around">
+        <div className="text-center bg-white rounded-md pig-game">
+          <h1 className="text-2xl p-3 font-medium text-center text-orange">
+            PIG GAME
+          </h1>
         </div>
+
+        <button
+          onClick={toggleRulesModal}
+          className="px-6 py-4 mb-3 font-medium text-black bg-white rounded-lg"
+        >
+          Rules
+        </button>
+      </div>
+
+      <div className=" flex items-center justify-center  lg:flex-row">
+        <div
+          className="flex flex-col items-center justify-center gap-16 py-28 lg:rounded-s-2xl px-44"
+          style={play1background}
+        >
+          <p className="text-5xl text-black">{player1}</p>
+          <h2 className="text-red-500 text-7xl text-red"> {player1Score}</h2>
+          <div className="p-6 mb-2 text-xl text-center text-white rounded-lg current-box">
+            <p>current</p>
+            {CurrentPlayer === 1 ? currentRoundScore : 0}
+          </div>
+        </div>
+        <div
+          className="flex flex-col items-center justify-center gap-16 px-44 py-28 lg:rounded-e-2xl "
+          style={play2background}
+        >
+          <p className="text-5xl text-black">{player2}</p>
+          <h2 className="text-red-500 text-7xl text-red"> {player2Score}</h2>
+          <div className="p-6 mb-2 text-xl text-center text-white rounded-lg current-box ">
+            <p>current</p>
+            {CurrentPlayer === 2 ? currentRoundScore : 0}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center items-center -translate-y-96 ">
         <button
           onClick={Newgame}
-          className="py-3 mb-3 text-white translate-y-40 rounded-lg px-7 new-game-btn"
+          className="py-3 mb-3 text-white -translate-y-32  rounded-lg px-7 new-game-btn"
         >
           New Game
         </button>
-        <div className="container flex flex-col items-center justify-center py-16 lg:flex-row">
-          <div
-            className="flex flex-col items-center justify-center gap-16 py-28 lg:rounded-s-2xl px-44"
-            style={{
-              backgroundColor: player1Color,
-              backgroundImage: winner === 1 ? `url(${wincolor})` : player1Color,
-              backgroundSize: "cover",
-            }}
-          >
-            <p className="text-5xl text-black">{player1}</p>
-            <h2 className="text-red-500 text-7xl text-red"> {player1Score}</h2>
-            <div className="p-6 mb-2 text-xl text-center text-white rounded-lg current-box">
-              <p>current</p>
-              {CurrentPlayer === 1 ? currentRoundScore : 0}
-            </div>
-          </div>
-          <div
-            className="flex flex-col items-center justify-center gap-16 px-44 py-28 lg:rounded-e-2xl "
-            style={{
-              backgroundColor: player2Color,
-              backgroundImage: winner === 2 ? `url(${wincolor})` : player2Color,
-              backgroundSize: "cover",
-            }}
-          >
-            <p className="text-5xl text-black">{player2}</p>
-            <h2 className="text-red-500 text-7xl text-red"> {player2Score}</h2>
-            <div className="p-6 mb-2 text-xl text-center text-white rounded-lg current-box ">
-              <p>current</p>
-              {CurrentPlayer === 2 ? currentRoundScore : 0}
-            </div>
-          </div>
+        <div className="w-24 -translate-y-16 ">
+          <img src={diceImage} alt="" />
         </div>
-        <div className="flex flex-col -translate-y-96 ">
-          <div className="w-24 -translate-y-20 ">
-            <img src={diceImage} alt="" />
-          </div>
-          <button
-            className="py-3 mb-3 text-white rounded-lg px-7 bg-orange "
-            onClick={rollDice}
-          >
-            RollDice
-          </button>
-          <button
-            className="py-3 mb-3 text-white rounded-lg bg-orange"
-            onClick={holdScore}
-          >
-            Hold
-          </button>
-        </div>
-        {showRules && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="p-8 bg-white rounded-lg">
-              <Roles />
-              <button
-                onClick={toggleRulesModal}
-                className="px-4 py-2 mt-4 text-white bg-[#EB4D4D] rounded-lg"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+        <button
+          className="py-3 mb-3 text-white rounded-lg px-7 bg-orange "
+          onClick={rollDice}
+        >
+          RollDice
+        </button>
+        <button
+          className="p-3 mb-3 text-white rounded-lg bg-orange"
+          onClick={holdScore}
+        >
+          Hold
+        </button>
       </div>
+      {showRules && (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
+          <div className="p-8 bg-white rounded-lg max-w-xl">
+            <Roles />
+            <button
+              onClick={toggleRulesModal}
+              className="px-4 py-2 mt-4  text-white close-btn rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

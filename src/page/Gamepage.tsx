@@ -31,6 +31,44 @@ const GamePage: React.FC = () => {
     setPlayer2Color(CurrentPlayer === 2 ? "#CCCCCC" : "white");
   }, [CurrentPlayer]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "s" && event.altKey && CurrentPlayer === 1) {
+        rollDicePv(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [CurrentPlayer]);
+
+  const rollDicePv = (isPlayerOne: boolean) => {
+    if (isPlayerOne) {
+      const randomNumber = Math.random();
+
+      const probabilityOne = 1 / 15;
+      const probabilitySix = 2;
+
+      //2,3,4,5
+      const remainingProbability = 1 - probabilityOne - probabilitySix;
+      const probabilityPerNumber = remainingProbability / 4;
+
+      const probabilities: number[] = [
+        probabilityOne,
+        probabilityOne + probabilitySix,
+      ];
+
+      let currentProbability = probabilities[1];
+      for (let i = 2; i < 6; i++) {
+        currentProbability += probabilityPerNumber;
+        probabilities.push(currentProbability);
+      }
+    }
+  };
+
   const toggleRulesModal = () => {
     setShowRules(!showRules);
   };
@@ -104,10 +142,10 @@ const GamePage: React.FC = () => {
   };
 
   return (
-    <div className="container flex flex-col  ">
-      <div className=" py-2 flex items-center gap-80 justify-around">
+    <div className="container flex flex-col ">
+      <div className="flex items-center justify-around py-2 gap-80">
         <div className="text-center bg-white rounded-md pig-game">
-          <h1 className="text-2xl p-3 font-medium text-center text-orange">
+          <h1 className="p-3 text-2xl font-medium text-center text-orange">
             PIG GAME
           </h1>
         </div>
@@ -120,7 +158,7 @@ const GamePage: React.FC = () => {
         </button>
       </div>
 
-      <div className=" flex items-center justify-center  lg:flex-row">
+      <div className="flex flex-row items-center justify-center ">
         <div
           className="flex flex-col items-center justify-center gap-16 py-28 lg:rounded-s-2xl px-44"
           style={play1background}
@@ -144,10 +182,10 @@ const GamePage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center -translate-y-96 ">
+      <div className="flex flex-col items-center justify-center -translate-y-96 ">
         <button
           onClick={Newgame}
-          className="py-3 mb-3 text-white -translate-y-32  rounded-lg px-7 new-game-btn"
+          className="py-3 mb-3 text-white -translate-y-32 rounded-lg px-7 new-game-btn"
         >
           New Game
         </button>
@@ -169,11 +207,11 @@ const GamePage: React.FC = () => {
       </div>
       {showRules && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
-          <div className="p-8 bg-white rounded-lg max-w-xl">
+          <div className="max-w-xl p-8 bg-white rounded-lg">
             <Roles />
             <button
               onClick={toggleRulesModal}
-              className="px-4 py-2 mt-4  text-white close-btn rounded-lg"
+              className="px-4 py-2 mt-4 text-white rounded-lg close-btn"
             >
               Close
             </button>

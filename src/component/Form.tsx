@@ -13,8 +13,8 @@ const Form: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center mt-4 ">
-      <div className="flex flex-col  p-10 bg-white rounded-2xl ">
-        <h1 className="text-center  pb-2 text-orange font-medium text-lg">
+      <div className="flex flex-col p-10 bg-white rounded-2xl ">
+        <h1 className="pb-2 text-lg font-medium text-center text-orange">
           PIG GAME
         </h1>
         <label htmlFor="player1" className="text-black">
@@ -51,7 +51,7 @@ const Form: React.FC = () => {
           onChange={(e) => setWinScore(parseInt(e.target.value))}
         />
         <button
-          className="p-2 mt-4 start-btn bg-red-700 rounded-lg"
+          className="p-2 mt-4 bg-red-700 rounded-lg start-btn"
           onClick={Nextpage}
         >
           Start Game
